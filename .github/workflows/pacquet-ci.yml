@@ -310,13 +310,18 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Initialize Rust before dependency installation
+        uses: $/.github/actions/rustup
+        with:
+          restore-cache: false
+
       - name: Install pnpm
         uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b # v2.1.0
         with:
           install: false
 
-      # Only the wrapper's own dependencies: get-pnpm, which the published
-      # package carries in its dist/ payload and the tests stand in for.
+      # The filter selects the wrapper's Node dependencies. Cargo installation
+      # still discovers the Rust workspace and requires its toolchain.
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --filter pacquet
 
