@@ -44,6 +44,10 @@ sudo dnf install make automake gcc gcc-c++ kernel-devel
 
 Rust is now the primary language in this repository, so most contributions need a working Rust toolchain and the Rust developer tools. The Rust workspace (`Cargo.toml`, `rust-toolchain.toml`, `justfile`) lives at the repository root; run `cargo` and `just` from there.
 
+Run `pnpm install` from the repository root to install both JavaScript and Rust dependencies with the pinned pnpm 12.4.0 CLI. It reads `Cargo.lock`, links registry crates into `.pnpm/crates/crates-io`, and adds a managed source block to `.cargo/config.toml`. Cargo still builds and tests the project. After installation, `cargo metadata --locked --offline` verifies that the dependencies are available without network access.
+
+The source block is generated locally; do not commit it. Rust-only CI jobs that do not run `pnpm install` continue using Cargo's registry cache.
+
 1. Install [`rustup`](https://rustup.rs). You do not need to select a toolchain by hand. `rust-toolchain.toml` pins the version the project builds with, and `rustup` installs it, together with `rustfmt` and `clippy` from the pinned `default` profile, the first time you run `cargo` inside the repository.
 
 2. Install [`just`](https://just.systems) (the task runner) and [`cargo-binstall`](https://github.com/cargo-bins/cargo-binstall), then install the task tools from the repository root:
